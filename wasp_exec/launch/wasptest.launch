@@ -1,0 +1,10 @@
+<launch>
+  <param name="/use_sim_time" value="false" />
+
+  <include file="$(find wasp_exec)/launch/wasp.launch" ns="/uav0">
+  </include>
+
+  <include file="$(find lrs_sherpa)/launch/txt.launch" ns="/op0">
+  </include>
+
+</launch>

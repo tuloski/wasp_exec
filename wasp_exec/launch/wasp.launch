@@ -1,0 +1,5 @@
+<launch>
+  <node name="tstfactory" pkg="lrs_tst" type="tstfactory" />
+  <node name="waspexec" pkg="wasp_exec" type="waspexecutor" />
+  <node name="waspexecmanager" pkg="lrs_exec" type="tstexecmanager" />
+</launch>
