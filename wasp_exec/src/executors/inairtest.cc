@@ -10,8 +10,8 @@ extern ros::NodeHandle * global_nh;
 
 using namespace std;
 
-Exec::InAirTest::InAirTest (std::string ns, int id) : Executor (ns, id) {
-
+Exec::InAirTest::InAirTest (std::string ns, int id) : Executor (ns, id),
+		received_mms_state(false) {
   lrs_msgs_tst::TSTExecInfo einfo;
   einfo.can_be_aborted = false;
   einfo.can_be_enoughed = false;
@@ -61,7 +61,7 @@ void Exec::InAirTest::start () {
 
   while (!received_mms_state){
 	ros::spinOnce();    //when called from delegation there is no ROS so we need to run the spin to read the topics
-	usleep(200);
+	usleep(200000);
 	counter_wait_mms_state++;
 	if (counter_wait_mms_state > 15){	//Waited mms_state for 3 seconds...something failed
 		fail ("Exec InAirTest: Failed to receive mms state");

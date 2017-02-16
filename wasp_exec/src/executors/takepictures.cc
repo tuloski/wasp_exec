@@ -65,7 +65,7 @@ bool Exec::TakePictures::check () {
 	while (!received_qos_sensors){
 		ROS_INFO ("TakePictures::No QoS for sensors....");
 		ros::spinOnce();    //when called from delegation there is no ROS so we need to run the spin to read the topics
-		usleep(200);
+		usleep(20000);
 	}
 	received_qos_sensors = false;
 	//

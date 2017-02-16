@@ -79,7 +79,7 @@ bool Exec::ScanGroundSingle::check () {
 		if (get_param("sensor-type", sensortype)) {
 			while (!received_qos_sensors){
 				ros::spinOnce();    //when called from delegation there is no ROS so we need to run the spin to read the topics
-				usleep(200);
+				usleep(20000);
 			}
 			ROS_INFO ("Exec::ScanGroundSingle::Got sensors list");
 			received_qos_sensors = false;
@@ -184,7 +184,7 @@ void Exec::ScanGroundSingle::start () {
 		//Check sensors status
 		while (!received_qos_sensors){
 			ros::spinOnce();    //when called from delegation there is no ROS so we need to run the spin to read the topics
-			usleep(200);
+			usleep(20000);
 		}
 		ROS_INFO ("Exec::ScanGroundSingle::Got sensors list");
 		received_qos_sensors = false;
