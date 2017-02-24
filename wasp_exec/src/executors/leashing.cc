@@ -189,17 +189,20 @@ void Exec::Leashing::start () {
 		max_time = 1000000;    //no max time....only enough
 
 	    while (!enough_requested) {   //waiting for enough
-		  usleep (100000);
-		  boost::this_thread::interruption_point();
-		}
-		mission_succesfull = true;
+	    	usleep (100000);
+		boost::this_thread::interruption_point();
+	    }
+	    mission_succesfull = true;
 		
-		//Send command to stop leashing
+	    //Send command to stop leashing
 	    cmd.param1 = 0;         			//1-->Start leashing; 0-->Stop leashing
-		cmd.seq = 0;
+	    cmd.seq = 0;
 	    global_cmd_pub->publish (cmd);
 	    ROS_INFO ("Exec::Leashing: Sent stop command");
 		
+	    set_succeeded_flag (node_ns, node_id, true);
+	    set_aborted_flag (node_ns, node_id, false);
+	    set_finished_flag (node_ns, node_id, true);
 	    //
 	    // When we reach this point the node execution would be finished.
 	    //
