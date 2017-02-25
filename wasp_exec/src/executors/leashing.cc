@@ -24,7 +24,8 @@ Exec::Leashing::Leashing (std::string ns, int id) : Executor (ns, id) {
 	lrs_msgs_tst::TSTExecInfo einfo;
 	einfo.can_be_aborted = true;
 	einfo.can_be_enoughed = true;
-	einfo.can_be_paused = true;
+	//einfo.can_be_paused = true;
+	einfo.can_be_paused = false;
 	set_exec_info(ns, id, einfo);
 	update_from_exec_info (einfo);
 }
@@ -188,11 +189,73 @@ void Exec::Leashing::start () {
 		
 		max_time = 1000000;    //no max time....only enough
 
-	    while (!enough_requested) {   //waiting for enough
+	    while (!enough_requested()) {   //waiting for enough
 	    	usleep (100000);
 		boost::this_thread::interruption_point();
+		if (pause_requested ()) {
+			clear_pause_requested ();
+			continue_requested = false;
+			ROS_INFO ("Exec::Leashing::request_pause");
+			//Send command to stop leashing
+			mms_msgs::Cmd cmd;
+			cmd.target_system = 0;          
+			cmd.target_component = 0;
+			cmd.seq = 0;
+			ROS_INFO ("Sequence for Leashing: %d",qqseq_);
+			cmd.frame = 6;
+			cmd.command = 25;       			//MAV_CMD_NAV_FOLLOW         
+			cmd.current = 0;					//not used
+			cmd.autocontinue = 0;				//not used
+			cmd.param1 = 0;         			//1-->Start leashing; 0-->Stop leashing
+			cmd.param2 = 0;        				//NOT USED
+			cmd.param3 = 0;        				//NOT USED
+			cmd.param4 = 0;        				//RESERVED
+			cmd.param5 = 0;    					//RESERVED
+			cmd.param6 = 0;	   					//RESERVED
+			cmd.param7 = 0;						//RESERVED
+			global_cmd_pub->publish (cmd);
+			ROS_INFO ("Exec::Leashing: Sent stop command because pause");
+			pause_requested = true;
+			set_paused_flag (node_ns, node_id, true);
+			paused = true;
+		}
+		if (continue_requested ()) {
+			clear_continue_requested ();
+			if (pause_requested && !continue_requested){
+				pause_requested = false;
+				set_paused_flag (node_ns, node_id, false);
+				ROS_INFO ("Exec::Leashing::request_continue");
+				//Send command to start leashing
+				mms_msgs::Cmd cmd;
+				cmd.target_system = 0;          
+				cmd.target_component = 0;
+				{                                              //brackets are to ensure (I hope) that after the shared resource (seq) is accessed, the mutex destructor is called and the mutex unlocked
+				    boost::mutex::scoped_lock lock(seq_mutex);
+				    qqseq_ = global_seq;
+				    cmd.seq = global_seq++;
+			    }
+				ROS_INFO ("Sequence for Leashing: %d",qqseq_);
+				cmd.frame = 6;
+				cmd.command = 25;       			//MAV_CMD_NAV_FOLLOW         
+				cmd.current = 0;					//not used
+				cmd.autocontinue = 0;				//not used
+				cmd.param1 = 1;         			//1-->Start leashing; 0-->Stop leashing
+				cmd.param2 = 0;        				//NOT USED
+				cmd.param3 = 0;        				//NOT USED
+				cmd.param4 = 0;        				//RESERVED
+				cmd.param5 = 0;    					//RESERVED
+				cmd.param6 = 0;	   					//RESERVED
+				cmd.param7 = 0;						//RESERVED
+				global_cmd_pub->publish (cmd);
+				ROS_INFO ("Exec::Leashing: Sent stop command because pause");
+				continue_requested = true;
+			}
+			set_paused_flag (node_ns, node_id, false);
+			paused = false;
+		}
 	    }
 	    mission_succesfull = true;
+	    ROS_ERROR ("Exec::ScanGroundSingle::enough_execution");
 		
 	    //Send command to stop leashing
 	    cmd.param1 = 0;         			//1-->Start leashing; 0-->Stop leashing
@@ -212,7 +275,7 @@ void Exec::Leashing::start () {
 	    wait_for_postwork_conditions ();
     }
     catch (boost::thread_interrupted) {
-        ROS_ERROR("BOOST INTERUPTED IN Leashing");
+        abort_fail("Exec:Leashing ABORT");
         set_succeeded_flag (node_ns, node_id, false);
         set_aborted_flag (node_ns, node_id, true);
         set_finished_flag (node_ns, node_id, true);
@@ -257,14 +320,14 @@ bool Exec::Leashing::abort () {
   return res;
 }
 
-bool Exec::Leashing::enough_execution () {
+/*bool Exec::Leashing::enough_execution () {
   bool res = true;
   ROS_ERROR ("Exec::ScanGroundSingle::enough_execution");
   enough_requested = true;
   return res;
-}
+}*/
 
-bool Exec::Leashing::request_pause () {
+/*bool Exec::Leashing::request_pause () {
 	bool res = true;
 	if (!pause_requested){
 		continue_requested = false;
@@ -292,9 +355,9 @@ bool Exec::Leashing::request_pause () {
 		pause_requested = true;
 	}
 	return res;
-}
+}*/
 
-bool Exec::Leashing::continue_execution () {
+/*bool Exec::Leashing::continue_execution () {
 	bool res = true;
 	if (pause_requested && !continue_requested){
 		pause_requested = false;
@@ -327,4 +390,4 @@ bool Exec::Leashing::continue_execution () {
 	}
 	ROS_ERROR ("Exec::Leashing::request_continue");
 	return res;
-}
+}*/
