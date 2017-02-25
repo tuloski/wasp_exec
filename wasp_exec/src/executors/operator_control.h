@@ -20,7 +20,7 @@ namespace Exec {
 
   class OperatorControl : public virtual Executor {
 	private:
-	bool enough_requested;      //enough flag to stop operator control
+	//bool enough_requested;      //enough flag to stop operator control
 	int16_t frame;
 	bool mission_succesfull;	//true if the command is accomplished
 	int16_t qqseq_;                   //internal seq to save the sequence of the saved command
@@ -29,10 +29,10 @@ namespace Exec {
     OperatorControl (std::string ns, int id);
     virtual ~OperatorControl () {};
 
-    bool prepare ();
-    void start ();
-    bool abort ();
-	virtual bool enough_execution ();
+    virtual bool prepare ();
+    virtual void start ();
+    virtual bool abort ();
+    //virtual bool enough_execution ();
   };
 
 };
