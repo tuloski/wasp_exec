@@ -108,11 +108,12 @@ void Exec::OperatorControl::start () {
 
 	    boost::this_thread::interruption_point();
 
-	    while (!enough_requested) {
-		  usleep (1000);
+	    while (!enough_requested()) {
+		  usleep (100000);
 		  //TODO maybe put timeout
 		  boost::this_thread::interruption_point();
 		}
+	    	ROS_ERROR ("Exec::OperatorControl::enough_execution");
 		mission_succesfull = true;
 
 		cmd.target_system = 0;
@@ -150,21 +151,21 @@ void Exec::OperatorControl::start () {
 	    wait_for_postwork_conditions ();
     }
     catch (boost::thread_interrupted) {
-        ROS_ERROR("BOOST INTERUPTED IN OperatorControl");
-        set_succeeded_flag (node_ns, node_id, false);
-        set_aborted_flag (node_ns, node_id, true);
-        set_finished_flag (node_ns, node_id, true);
+	abort_fail("OperatorControl ABORT");
+        //set_succeeded_flag (node_ns, node_id, false);
+        //set_aborted_flag (node_ns, node_id, true);
+        //set_finished_flag (node_ns, node_id, true);
     }
 }
 
-bool Exec::OperatorControl::enough_execution () {
+/*bool Exec::OperatorControl::enough_execution () {
   bool res = true;
   ROS_ERROR ("Exec::ScanGroundSingle::enough_execution");
   enough_requested = true;
   return res;
-}
+}*/
 
-bool Exec::OperatorControl::abort () {
+/*bool Exec::OperatorControl::abort () {
   bool res = false;
   ROS_ERROR("Exec::OperatorControl::abort");
   ostringstream os;
@@ -180,4 +181,4 @@ bool Exec::OperatorControl::abort () {
     return false;
   }
   return res;
-}
+}*/
