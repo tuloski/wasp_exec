@@ -50,16 +50,16 @@ namespace Exec {
     virtual ~Leashing () {};
 
 	//virtual bool check ();
-	bool prepare ();
-	void start ();
-	bool abort ();
-	void callbackAckMission(const mms_msgs::Ack_mission::ConstPtr& msg);
+	virtual bool prepare ();
+	virtual void start ();
+	virtual bool abort ();
+	virtual void callbackAckMission(const mms_msgs::Ack_mission::ConstPtr& msg);
 	void callbackLeashingTarget(const geographic_msgs::GeoPose::ConstPtr& msg);
 	void callbackLeashingCommand(const lrs_msgs_common::LeashingCommand::ConstPtr& msg);
 	void callbackLeashingStatus(const reference::LeashingStatus::ConstPtr& msg);
-	virtual bool enough_execution();
-	virtual bool request_pause ();
-    virtual bool continue_execution ();
+	//virtual bool enough_execution();
+	//virtual bool request_pause ();
+        //virtual bool continue_execution ();
   };
 
 };
