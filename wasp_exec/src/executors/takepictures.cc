@@ -119,7 +119,8 @@ void Exec::TakePictures::start () {
 		} else {
 			delay = 0;
 			if (n == 1){
-				//If we take 1 photo we don't need delay
+				//If we take 1 photo we don't need delay. Just to compute the timeout
+				delay = 2;
 			} else {
 				fail("takepicture: parameter delay_between_pictures_in_seconds is missing");
 				return;
