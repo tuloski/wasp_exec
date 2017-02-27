@@ -94,7 +94,7 @@ bool Exec::ScanGroundSingle::check () {
 					return false;
 				}
 			} else if (sensortype == "artva"){
-				if (qos_sens_.artva_present && qos_sens_.artva_working && qos_sens_.sonar_present && qos_sens_.sonar_working){
+				if (qos_sens_.artva_present && qos_sens_.artva_working && qos_sens_.altimeter_present && qos_sens_.altimeter_working){
 					res = true;
 				} else {
 					return false;
@@ -199,7 +199,7 @@ void Exec::ScanGroundSingle::start () {
 				return;
 			}
 		} else if (sensor_type == "artva"){
-			if (qos_sens_.artva_present && qos_sens_.artva_working && qos_sens_.sonar_present && qos_sens_.sonar_working){
+			if (qos_sens_.artva_present && qos_sens_.artva_working && qos_sens_.altimeter_present && qos_sens_.altimeter_working){
 				//Good
 			} else {
 				fail("ScanGroundSingle: NO ARTVA SENSOR!!!");
