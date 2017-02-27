@@ -161,7 +161,7 @@ void Exec::ScanGroundSingle::start () {
 		}
 		if (!get_param("follow_ground_flag", flag_ground)){
 			frame = 6;     //AMSL
-			altitude = 1590;	//TODO appropriate altitude should be taken from DCM!!!
+			altitude = 1618;	//TODO appropriate altitude should be taken from DCM!!!
 		} else {
 			if (flag_ground){
 				frame = 11;   //SONAR
@@ -171,7 +171,7 @@ void Exec::ScanGroundSingle::start () {
 				}
 			}
 			else frame = 6;				//AMSL
-			altitude = 1590;			//TODO appropriate altitude should be taken from DCM!!!
+			altitude = 1618;			//TODO appropriate altitude should be taken from DCM!!!
 		}
 		if (sensor_type == "artva" && !flag_ground){
 			fail("ScanGroundSingle: Missing 'follow_ground_altitude' flag with sensor: 'artva'");
@@ -388,7 +388,7 @@ void Exec::ScanGroundSingle::start () {
 			cmd.command = 2000;         //MAV_CMD_IMAGE_START_CAPTURE         
 			cmd.current = 0;			//not used
 			cmd.autocontinue = 0;		//not used
-			cmd.param1 = 2;            //delay between photos     //TODO set appropriate
+			cmd.param1 = 6;            //delay between photos     //TODO set appropriate
 			//cmd.param2 = round(max_time/1000.0f/1.0f);         //number of photos to take. Calculated as max_time (in seconds) divided by the delay (1s in this case).
 			cmd.param2 = 0;         //number of photos to take. Unlimited
 			cmd.param3 = 0;        	//resolution. Not used now. TODO to add

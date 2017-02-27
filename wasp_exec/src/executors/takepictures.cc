@@ -119,8 +119,7 @@ void Exec::TakePictures::start () {
 		} else {
 			delay = 0;
 			if (n == 1){
-				//If we take 1 photo we don't need delay. Just to compute the timeout
-				delay = 2;
+				//If we take 1 photo we don't need delay.
 			} else {
 				fail("takepicture: parameter delay_between_pictures_in_seconds is missing");
 				return;
@@ -166,7 +165,8 @@ void Exec::TakePictures::start () {
 		//
 
 		if (n==0){ max_time = 1800000;    //~30 minutes (max flight time)
-		} else max_time = n * delay * 1000.0f * 1.3;		//estimated time given by: (n of photos) x (delay) x (Seconds2Milliseconds) x (Safety Coefficient)
+		} else if (n==1) max_time = 5*1000.0f;	//5 seconds to take one picture
+		else max_time = n * delay * 1000.0f * 1.3;		//estimated time given by: (n of photos) x (delay) x (Seconds2Milliseconds) x (Safety Coefficient)
 
 		boost::this_thread::interruption_point();
 		for (int i=0; i<max_time; i++) {
