@@ -25,7 +25,7 @@ extern boost::mutex ref_mutex;
 using namespace std;
 
 
-Exec::OperatorControl::OperatorControl (std::string ns, int id) : Executor (ns, id), enough_requested(false) {
+Exec::OperatorControl::OperatorControl (std::string ns, int id) : Executor (ns, id) {
 	lrs_msgs_tst::TSTExecInfo einfo;
 	einfo.can_be_aborted = true;
 	einfo.can_be_enoughed = true;

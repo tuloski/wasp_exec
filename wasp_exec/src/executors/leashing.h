@@ -31,9 +31,9 @@ namespace Exec {
 	//int control_altitude_mode;
 	//double heading;
 	//int heading_control_mode;
-	bool enough_requested;      //enough flag to stop leashing
-	bool pause_requested;
-    bool continue_requested;
+	//bool enough_requested;      //enough flag to stop leashing
+	bool paused;
+    bool continued;
 	bool flag_target_published;
 	std::string target_position_topic;
 	std::string leashing_command_topic;

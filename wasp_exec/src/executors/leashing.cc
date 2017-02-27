@@ -92,8 +92,8 @@ bool Exec::Leashing::prepare () {
   ROS_INFO ("Exec::Leashing::prepare");
   mission_succesfull = false;  
   flag_target_published = false;
-  pause_requested = false;
-  continue_requested = false;
+  paused = false;
+  continued = false;
 
   if (res) {
     set_active_flag (node_ns, node_id, true);
@@ -194,7 +194,7 @@ void Exec::Leashing::start () {
 		boost::this_thread::interruption_point();
 		if (pause_requested ()) {
 			clear_pause_requested ();
-			continue_requested = false;
+			continued = false;
 			ROS_INFO ("Exec::Leashing::request_pause");
 			//Send command to stop leashing
 			mms_msgs::Cmd cmd;
@@ -215,14 +215,14 @@ void Exec::Leashing::start () {
 			cmd.param7 = 0;						//RESERVED
 			global_cmd_pub->publish (cmd);
 			ROS_INFO ("Exec::Leashing: Sent stop command because pause");
-			pause_requested = true;
+			paused = true;
 			set_paused_flag (node_ns, node_id, true);
 			paused = true;
 		}
 		if (continue_requested ()) {
 			clear_continue_requested ();
-			if (pause_requested && !continue_requested){
-				pause_requested = false;
+			if (paused && !continued){
+				paused = false;
 				set_paused_flag (node_ns, node_id, false);
 				ROS_INFO ("Exec::Leashing::request_continue");
 				//Send command to start leashing
@@ -248,7 +248,7 @@ void Exec::Leashing::start () {
 				cmd.param7 = 0;						//RESERVED
 				global_cmd_pub->publish (cmd);
 				ROS_INFO ("Exec::Leashing: Sent stop command because pause");
-				continue_requested = true;
+				continued = true;
 			}
 			set_paused_flag (node_ns, node_id, false);
 			paused = false;
@@ -330,7 +330,7 @@ bool Exec::Leashing::abort () {
 /*bool Exec::Leashing::request_pause () {
 	bool res = true;
 	if (!pause_requested){
-		continue_requested = false;
+		continued = false;
 		set_paused_flag (node_ns, node_id, true);
 		ROS_INFO ("Exec::Leashing::request_pause");
 		//Send command to stop leashing
@@ -359,7 +359,7 @@ bool Exec::Leashing::abort () {
 
 /*bool Exec::Leashing::continue_execution () {
 	bool res = true;
-	if (pause_requested && !continue_requested){
+	if (pause_requested && !continued){
 		pause_requested = false;
 		set_paused_flag (node_ns, node_id, false);
 		ROS_INFO ("Exec::Leashing::request_continue");
@@ -386,7 +386,7 @@ bool Exec::Leashing::abort () {
 		cmd.param7 = 0;						//RESERVED
 		global_cmd_pub->publish (cmd);
 		ROS_INFO ("Exec::Leashing: Sent stop command because pause");
-		continue_requested = true;
+		continued = true;
 	}
 	ROS_ERROR ("Exec::Leashing::request_continue");
 	return res;

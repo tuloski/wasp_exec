@@ -12,6 +12,7 @@
 #include "mms_msgs/Cmd.h"
 
 #include "lrs_srvs_exec/TSTCreateExecutor.h"
+#include "lrs_msgs_tst/OperatorRequest.h"
 
 #include "executors/flyto.h"
 #include "executors/takeoff.h"
@@ -34,6 +35,8 @@ std::map<std::string, Executor *> execmap;
 std::map<std::string, boost::thread *> threadmap;
 ros::NodeHandle * global_nh;
 ros::Publisher * global_confirm_pub;
+ros::Publisher * global_tell_operator_content_pub;
+ros::Publisher * global_tell_operator_content_pub_proxy;
 ros::Publisher * global_cmd_pub;
 
 int16_t global_seq = 1;
@@ -157,6 +160,11 @@ int main(int argc, char **argv) {
 
   ros::Publisher confirm_pub = n.advertise<lrs_msgs_tst::ConfirmReq>("confirm_request", 1, true); // queue size 1 and latched
   global_confirm_pub = &confirm_pub;
+
+  ros::Publisher content_pub = n.advertise<lrs_msgs_tst::OperatorRequest>("/operator", 1);
+  ros::Publisher content_pub_proxy = n.advertise<lrs_msgs_tst::OperatorRequest>("/operator_proxy", 1);
+  global_tell_operator_content_pub = &content_pub;
+  global_tell_operator_content_pub_proxy = &content_pub_proxy;
 
   ros::Publisher cmd_pub = n.advertise<mms_msgs::Cmd>("sent_command", 10); // command topic
   global_cmd_pub = &cmd_pub;
