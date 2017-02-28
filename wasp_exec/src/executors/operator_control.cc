@@ -50,7 +50,7 @@ Exec::OperatorControl::OperatorControl (std::string ns, int id) : Executor (ns, 
 bool Exec::OperatorControl::prepare () {
   bool res = true;
   qqseq_ = 0;
-  frame = 11; //TODO chech that we always use the altimiter mode (because we are using it for ARTVA)
+  frame = 11; //TODO chech that we always use the altimeter mode (because we are using it for ARTVA)
   ROS_INFO ("Exec::OperatorControl::prepare");
   mission_succesfull = false;  
 

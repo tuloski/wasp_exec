@@ -100,6 +100,7 @@ void Exec::FlyTo::start () {
 		    }
 		    else frame = 6;				//AMSL
 	    }
+	    //TODO check if the altimeter is there for the follow_ground
 		
 		/*std::string location;                                 //location: for indoor at terra
 		if (global_nh->getParam("/location", location)){
