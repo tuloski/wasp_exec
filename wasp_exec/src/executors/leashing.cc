@@ -276,9 +276,9 @@ void Exec::Leashing::start () {
     }
     catch (boost::thread_interrupted) {
         abort_fail("Exec:Leashing ABORT");
-        set_succeeded_flag (node_ns, node_id, false);
-        set_aborted_flag (node_ns, node_id, true);
-        set_finished_flag (node_ns, node_id, true);
+        //set_succeeded_flag (node_ns, node_id, false);
+        //set_aborted_flag (node_ns, node_id, true);
+        //set_finished_flag (node_ns, node_id, true);
     }
 }
 

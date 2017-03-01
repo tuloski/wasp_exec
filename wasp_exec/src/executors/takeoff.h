@@ -24,10 +24,10 @@ namespace Exec {
 	TakeOff (std::string ns, int id);
 	virtual ~TakeOff () {};
 
-	bool prepare ();
-	void start ();
+	virtual bool prepare ();
+	virtual void start ();
 	void callbackAckMission(const mms_msgs::Ack_mission::ConstPtr& msg);
-	virtual bool abort ();
+	//virtual bool abort ();
 	
   };
 
